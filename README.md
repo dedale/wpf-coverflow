@@ -1,0 +1,4 @@
+wpf-coverflow
+=============
+
+WPF CoverFlow
