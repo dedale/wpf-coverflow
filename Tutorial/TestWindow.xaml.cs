@@ -3,9 +3,6 @@ using System.IO;
 using System.Reflection;
 namespace Ded.Tutorial.Wpf.CoverFlow
 {
-    /// <summary>
-    /// Logique d'interaction pour Window1.xaml
-    /// </summary>
     public partial class TestWindow : Window
     {
         public TestWindow()
@@ -13,8 +10,8 @@ namespace Ded.Tutorial.Wpf.CoverFlow
             InitializeComponent();
             var assembly = new FileInfo(Assembly.GetExecutingAssembly().Location);
             var image = new FileInfo(Path.Combine(assembly.Directory.FullName, "Katy Perry.jpg"));
-            var cover = new Cover(image.FullName);
-            visualModel.Children.Add(cover);
+            for (int i = -1; i < 2; i++)
+                visualModel.Children.Add(new Cover(image.FullName, i));
         }
     }
 }
