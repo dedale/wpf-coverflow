@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Ded.Tutorial.Wpf.CoverFlow.TestWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="WPF Coverflow" Height="320" Width="512" KeyDown="Window_KeyDown">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WPF Coverflow" Height="320" Width="512" KeyDown="Window_KeyDown">
   <Grid>
     <Grid.Background>
       <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -11,7 +11,7 @@
         </LinearGradientBrush.GradientStops>
       </LinearGradientBrush>
     </Grid.Background>
-    <Viewport3D x:Name="viewPort" Grid.Column="0" Grid.Row="0" ClipToBounds="False">
+    <Viewport3D x:Name="viewPort" Grid.Column="0" Grid.Row="0" ClipToBounds="False" MouseDown="viewPort_MouseDown">
       <Viewport3D.Camera>
         <PerspectiveCamera x:Name="camera" Position="0,0,3" 
           UpDirection="0,1,0" LookDirection="0,0,-1" 

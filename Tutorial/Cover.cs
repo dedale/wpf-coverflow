@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -10,6 +11,10 @@ namespace Ded.Tutorial.Wpf.CoverFlow
 {
     class Cover : ModelVisual3D
     {
+        #region Constants
+        public const double CoverStep = .2;
+        private readonly TimeSpan AnimationDuration = TimeSpan.FromMilliseconds(400);
+        #endregion
         #region Fields
         private readonly Model3DGroup modelGroup;
         private readonly AxisAngleRotation3D rotation;
@@ -83,8 +88,25 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         }
         private ImageSource LoadImageSource(string imagePath)
         {
-            Image thumb = Image.FromFile(imagePath);
-            return new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute));
+            var imageFile = new FileInfo(imagePath);
+            var thumbnailDir = new DirectoryInfo(Path.Combine(Environment.GetEnvironmentVariable("TEMP"), "tn"));
+            if (!thumbnailDir.Exists)
+                thumbnailDir.Create();
+            var thumbnail = new FileInfo(Path.Combine(thumbnailDir.FullName, imageFile.Name));
+            if (!thumbnail.Exists)
+            {
+                Image source = Image.FromFile(imageFile.FullName);
+                int height = source.Height;
+                int width = source.Width;
+                int factor = (height - 1) / 250 + 1;
+                int smallHeight = height / factor;
+                int smallWidth = width / factor;
+                Image thumb = source.GetThumbnailImage(smallWidth, smallHeight, null, IntPtr.Zero);
+                thumb.Save(thumbnail.FullName);
+            }
+            ImageSource image = new BitmapImage(new Uri(thumbnail.FullName, UriKind.RelativeOrAbsolute));
+            image.Freeze();
+            return image;
         }
         private Material LoadImage(ImageSource imSrc)
         {
@@ -92,11 +114,9 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         }
         private Material LoadImageMirror(ImageSource imSrc)
         {
-            var image = new System.Windows.Controls.Image();
-            image.Source = imSrc;
-            MediaColor startColor = MediaColor.FromArgb(127, 255, 255, 255);
-            MediaColor endColor = MediaColor.FromArgb(127, 255, 255, 255);
-            image.OpacityMask = new LinearGradientBrush(startColor, endColor, 90.0);
+            var image = new System.Windows.Controls.Image { Source = imSrc };
+            MediaColor color = MediaColor.FromArgb(127, 255, 255, 255);
+            image.OpacityMask = new LinearGradientBrush(color, color, 90.0);
             var brush = new VisualBrush(image);
             return new DiffuseMaterial(brush);
         }
@@ -106,7 +126,7 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         }
         private double TranslationX(int index)
         {
-            return pos * .2 + Math.Sign(pos - index) * 1.6;
+            return pos * CoverStep + Math.Sign(pos - index) * 1.5;
         }
         private double TranslationZ(int index)
         {
@@ -133,13 +153,19 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         }
         public void Animate(int index)
         {
-            TimeSpan duration = TimeSpan.FromMilliseconds(500);
-            var rotateAnimation = new DoubleAnimation(RotationAngle(index), duration);
-            var xAnimation = new DoubleAnimation(TranslationX(index), duration);
-            var zAnimation = new DoubleAnimation(TranslationZ(index), duration);
+            var rotateAnimation = new DoubleAnimation(RotationAngle(index), AnimationDuration);
+            var xAnimation = new DoubleAnimation(TranslationX(index), AnimationDuration);
+            var zAnimation = new DoubleAnimation(TranslationZ(index), AnimationDuration);
             rotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, rotateAnimation);
             translation.BeginAnimation(TranslateTransform3D.OffsetXProperty, xAnimation);
             translation.BeginAnimation(TranslateTransform3D.OffsetZProperty, zAnimation);
+        }
+        public bool Matches(MeshGeometry3D mesh)
+        {
+            foreach (GeometryModel3D part in modelGroup.Children)
+                if (part.Geometry == mesh)
+                    return true;
+            return false;
         }
     }
 }
