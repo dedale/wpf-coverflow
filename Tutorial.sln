@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial", "Tutorial.csproj", "{26D0B7C9-02A1-45FE-957D-08A369D7A683}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial", "Tutorial\Tutorial.csproj", "{26D0B7C9-02A1-45FE-957D-08A369D7A683}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowComponent", "FlowComponent\FlowComponent.csproj", "{F26592D5-D0C2-4A3B-A520-CC1A2B817AEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{26D0B7C9-02A1-45FE-957D-08A369D7A683}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26D0B7C9-02A1-45FE-957D-08A369D7A683}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26D0B7C9-02A1-45FE-957D-08A369D7A683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F26592D5-D0C2-4A3B-A520-CC1A2B817AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F26592D5-D0C2-4A3B-A520-CC1A2B817AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F26592D5-D0C2-4A3B-A520-CC1A2B817AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F26592D5-D0C2-4A3B-A520-CC1A2B817AEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

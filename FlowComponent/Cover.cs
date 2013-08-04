@@ -5,9 +5,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
-using Point2D = System.Windows.Point;
 using MediaColor = System.Windows.Media.Color;
-namespace Ded.Tutorial.Wpf.CoverFlow
+using Point2D = System.Windows.Point;
+namespace Ded.Tutorial.Wpf.CoverFlow.FlowComponent
 {
     class Cover : ModelVisual3D
     {
@@ -16,6 +16,7 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         private readonly TimeSpan AnimationDuration = TimeSpan.FromMilliseconds(400);
         #endregion
         #region Fields
+        private readonly ImageSource imageSource;
         private readonly Model3DGroup modelGroup;
         private readonly AxisAngleRotation3D rotation;
         private readonly TranslateTransform3D translation;
@@ -62,12 +63,28 @@ namespace Ded.Tutorial.Wpf.CoverFlow
             mesh.Freeze();
             return mesh;
         }
+        private double RectangleDx()
+        {
+            if (imageSource.Width > imageSource.Height)
+                return 0;
+            else
+                return 1 - imageSource.Width / imageSource.Height;
+        }
+        private double RectangleDy()
+        {
+            if (imageSource.Width > imageSource.Height)
+                return 1 - imageSource.Height / imageSource.Width;
+            else
+                return 0;
+        }
         private Geometry3D Tessellate()
         {
-            var p0 = new Point3D(-1, -1, 0);
-            var p1 = new Point3D(1, -1, 0);
-            var p2 = new Point3D(1, 1, 0);
-            var p3 = new Point3D(-1, 1, 0);
+            double dx = RectangleDx();
+            double dy = RectangleDy();
+            var p0 = new Point3D(-1 + dx, -1 + dy, 0);
+            var p1 = new Point3D(1 - dx, -1 + dy, 0);
+            var p2 = new Point3D(1 - dx, 1 - dy, 0);
+            var p3 = new Point3D(-1 + dx, 1 - dy, 0);
             var q0 = new Point2D(0, 0);
             var q1 = new Point2D(1, 0);
             var q2 = new Point2D(1, 1);
@@ -76,10 +93,12 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         }
         private Geometry3D TessellateMirror()
         {
-            var p0 = new Point3D(-1, -3, 0);
-            var p1 = new Point3D(1, -3, 0);
-            var p2 = new Point3D(1, -1, 0);
-            var p3 = new Point3D(-1, -1, 0);
+            double dx = RectangleDx();
+            double dy = RectangleDy();
+            var p0 = new Point3D(-1 + dx, -3 + 3 * dy, 0);
+            var p1 = new Point3D(1 - dx, -3 + 3 * dy, 0);
+            var p2 = new Point3D(1 - dx, -1 + dy, 0);
+            var p3 = new Point3D(-1 + dx, -1 + dy, 0);
             var q0 = new Point2D(0, 1);
             var q1 = new Point2D(1, 1);
             var q2 = new Point2D(1, 0);
@@ -137,10 +156,10 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         {
             this.pos = pos;
 
-            ImageSource imSrc = LoadImageSource(imagePath);
+            imageSource = LoadImageSource(imagePath);
             modelGroup = new Model3DGroup();
-            modelGroup.Children.Add(new GeometryModel3D(Tessellate(), LoadImage(imSrc)));
-            modelGroup.Children.Add(new GeometryModel3D(TessellateMirror(), LoadImageMirror(imSrc)));
+            modelGroup.Children.Add(new GeometryModel3D(Tessellate(), LoadImage(imageSource)));
+            modelGroup.Children.Add(new GeometryModel3D(TessellateMirror(), LoadImageMirror(imageSource)));
 
             rotation = new AxisAngleRotation3D(new Vector3D(0, 1, 0), RotationAngle(0));
             translation = new TranslateTransform3D(TranslationX(0), 0, TranslationZ(0));
@@ -148,7 +167,7 @@ namespace Ded.Tutorial.Wpf.CoverFlow
             transformGroup.Children.Add(new RotateTransform3D(rotation));
             transformGroup.Children.Add(translation);
             modelGroup.Transform = transformGroup;
-            
+
             Content = modelGroup;
         }
         public void Animate(int index)
