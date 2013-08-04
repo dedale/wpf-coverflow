@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using Point2D = System.Windows.Point;
@@ -132,9 +133,13 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         }
         public void Animate(int index)
         {
-            rotation.Angle = RotationAngle(index);
-            translation.OffsetX = TranslationX(index);
-            translation.OffsetZ = TranslationZ(index);
+            TimeSpan duration = TimeSpan.FromMilliseconds(500);
+            var rotateAnimation = new DoubleAnimation(RotationAngle(index), duration);
+            var xAnimation = new DoubleAnimation(TranslationX(index), duration);
+            var zAnimation = new DoubleAnimation(TranslationZ(index), duration);
+            rotation.BeginAnimation(AxisAngleRotation3D.AngleProperty, rotateAnimation);
+            translation.BeginAnimation(TranslateTransform3D.OffsetXProperty, xAnimation);
+            translation.BeginAnimation(TranslateTransform3D.OffsetZProperty, zAnimation);
         }
     }
 }
