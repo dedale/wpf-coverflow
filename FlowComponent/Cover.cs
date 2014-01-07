@@ -44,8 +44,6 @@ namespace Ded.Tutorial.Wpf.CoverFlow.FlowComponent
             mesh.TriangleIndices.Add(1);
             mesh.TriangleIndices.Add(2);
             mesh.Normals.Add(normal);
-            mesh.Normals.Add(normal);
-            mesh.Normals.Add(normal);
             mesh.TextureCoordinates.Add(q3);
             mesh.TextureCoordinates.Add(q2);
             mesh.TextureCoordinates.Add(q1);
@@ -54,8 +52,6 @@ namespace Ded.Tutorial.Wpf.CoverFlow.FlowComponent
             mesh.TriangleIndices.Add(2);
             mesh.TriangleIndices.Add(3);
             mesh.TriangleIndices.Add(0);
-            mesh.Normals.Add(normal);
-            mesh.Normals.Add(normal);
             mesh.Normals.Add(normal);
             mesh.TextureCoordinates.Add(q0);
             mesh.TextureCoordinates.Add(q1);

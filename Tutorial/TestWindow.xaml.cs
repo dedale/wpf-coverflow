@@ -3,6 +3,8 @@ using System.Windows.Input;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Threading;
 namespace Ded.Tutorial.Wpf.CoverFlow
 {
     public partial class TestWindow : Window
@@ -14,6 +16,11 @@ namespace Ded.Tutorial.Wpf.CoverFlow
                 return string.Compare(x.FullName, y.FullName);
             }
         }
+
+        #region Fields
+        private readonly PerformanceCounter counter = GetCounter();
+        private readonly DispatcherTimer timer = new DispatcherTimer();
+        #endregion
         #region Handlers
         private void DoKeyDown(Key key)
         {
@@ -43,8 +50,21 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         {
             flow.Index = Convert.ToInt32(slider.Value);
         }
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            long kb = Convert.ToInt64(counter.NextValue() / 1000);
+            perfLabel.Content = string.Format("{0,12} KB", kb.ToString("###.###.###"));
+        }
         #endregion
         #region Private stuff
+        private static PerformanceCounter GetCounter()
+        {
+            var counter = new PerformanceCounter();
+            counter.CategoryName = "Process";
+            counter.CounterName = "Private Bytes";
+            counter.InstanceName = Process.GetCurrentProcess().ProcessName;
+            return counter;
+        }
         private void Load(string imagePath)
         {
             var imageDir = new DirectoryInfo(imagePath);
@@ -57,12 +77,15 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         public TestWindow()
         {
             InitializeComponent();
-            //string path = Path.Combine(Environment.GetEnvironmentVariable("LOCALAPPDATA"), @"Microsoft\Media Player\Cache d’images\LocalMLS");
-            const string path = @"C:\Windows\Web\Wallpaper\Nature";
+            string path = Path.Combine(Environment.GetEnvironmentVariable("LOCALAPPDATA"), @"Microsoft\Media Player\Cache d’images\LocalMLS");
+            //const string path = @"C:\Windows\Web\Wallpaper\Nature";
             flow.Cache = new ThumbnailManager();
             Load(path);
             slider.Minimum = 0;
             slider.Maximum = flow.Count - 1;
+            timer.Tick += timer_Tick;
+            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Start();
         }
     }
 }

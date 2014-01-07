@@ -6,5 +6,6 @@
   <Grid>
     <flow:FlowControl x:Name="flow" Margin="0" Width="490" Height="282" />
     <Slider Height="20" Margin="33,0,33,12" Name="slider" VerticalAlignment="Bottom" ValueChanged="slider_ValueChanged" Focusable="False" />
+    <Label Content="0 KB" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="perfLabel" VerticalAlignment="Top" Width="142" Foreground="Red" />
   </Grid>
 </Window>

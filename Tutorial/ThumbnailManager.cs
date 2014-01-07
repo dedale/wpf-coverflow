@@ -43,8 +43,8 @@ namespace Ded.Tutorial.Wpf.CoverFlow
         }
         private byte[] GetThumbnail(string path)
         {
-            using (Image image = Image.FromFile(path))
-            using (Image source = AmazonCut(image))
+            using (Image fileImage = Image.FromFile(path))
+            using (Image source = AmazonCut(fileImage))
             {
                 int height = source.Height;
                 int width = source.Width;
