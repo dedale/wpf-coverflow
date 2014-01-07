@@ -62,9 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cover.cs" />
+    <Compile Include="CoverFactory.cs" />
     <Compile Include="FlowControl.xaml.cs">
       <DependentUpon>FlowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ICover.cs" />
+    <Compile Include="ICoverFactory.cs" />
+    <Compile Include="ImageInfo.cs" />
+    <Compile Include="IThumbnailManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

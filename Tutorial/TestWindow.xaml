@@ -3,5 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="WPF Coverflow" Width="512" Height="320" KeyDown="Window_KeyDown"
         xmlns:flow="clr-namespace:Ded.Tutorial.Wpf.CoverFlow.FlowComponent;assembly=Ded.Tutorial.Wpf.CoverFlow.FlowComponent">
-    <flow:FlowControl x:Name="flow" Margin="0" />
+  <Grid>
+    <flow:FlowControl x:Name="flow" Margin="0" Width="490" Height="282" />
+    <Slider Height="20" Margin="33,0,33,12" Name="slider" VerticalAlignment="Bottom" ValueChanged="slider_ValueChanged" Focusable="False" />
+  </Grid>
 </Window>
